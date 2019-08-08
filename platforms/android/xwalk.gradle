@@ -58,12 +58,12 @@ def getConfigPreference(name) {
 }
 
 if (!project.hasProperty('xwalk64bit')) {
-    ext.xwalk64bit = getConfigPreference("xwalk64bit");
+    ext.xwalk64bit = getConfigPreference("xwalk64bit").toBoolean();
     println xwalk64bit
 }
 if (cdvBuildMultipleApks == null) {
     ext.xwalkMultipleApk = getConfigPreference("xwalkMultipleApk").toBoolean();
-} else if (xwalk64bit == null) {
+} else if (xwalk64bit != true) {
     ext.xwalkMultipleApk = cdvBuildMultipleApks.toBoolean();
 }
 
@@ -116,7 +116,7 @@ cdvPluginPostBuildExtras.add({
     android {
         flavorDimensions "default"
 
-        if (xwalk64bit != null) {
+        if (xwalk64bit == true) {
             productFlavors {
                 x86_64 {
                     versionCode defaultConfig.versionCode*10 + 6
@@ -154,7 +154,7 @@ cdvPluginPostBuildExtras.add({
         }
         xwalkSpec = DEFAULT_GROUP_ID + artifactid + xwalkSpec
     }
-    if (xwalk64bit != null) {
+    if (xwalk64bit == true) {
         xwalkSpec = xwalkSpec + BIT_64
     }
     println xwalkSpec
